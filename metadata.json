@@ -1,0 +1,7 @@
+{
+  "name": "AYX Gaming & Sports",
+  "description": "A premium sports betting and casino application with AI-powered voice support and USDT wallet integration.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
