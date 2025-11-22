@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
@@ -24,6 +25,17 @@ const App: React.FC = () => {
       balance: 0.00, // Initial balance
       vipLevel: 1
     });
+  };
+
+  const handleLogout = () => {
+    setUser({
+      isLoggedIn: false,
+      walletAddress: null,
+      network: null,
+      balance: 0,
+      vipLevel: 0
+    });
+    setCurrentTab(AppTab.HOME);
   };
 
   const updateBalance = (amount: number) => {
@@ -65,6 +77,7 @@ const App: React.FC = () => {
                   updateBalance={updateBalance}
                   withdraw={handleWithdraw}
                   refreshBalance={refreshBalance}
+                  onLogout={handleLogout}
                 />
             ) : (
                 <Navigate to="/" replace />

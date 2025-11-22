@@ -37,3 +37,18 @@ export interface GameProvider {
 export type WalletNetwork = 'TRC20' | 'BEP20';
 
 export type WalletTab = 'deposit' | 'transfer' | 'withdraw' | 'vip';
+
+export type SubViewType = 'HISTORY' | 'TRANSACTIONS' | 'MESSAGES' | 'SECURITY' | 'HELP' | null;
+
+export interface ViewProps {
+  user: UserState;
+  openWallet: (tab: WalletTab) => void;
+  onLogout?: () => void;
+  refreshBalance?: () => Promise<void>;
+  onUpdateBalance?: (amount: number) => void;
+  isRefreshing?: boolean;
+  onLaunchGame?: (game: GameProvider) => void;
+  onNavigate?: (tab: AppTab) => void;
+  onOpenLiveSupport?: () => void;
+  onOpenChat?: () => void;
+}

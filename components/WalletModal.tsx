@@ -23,6 +23,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
   const [withdrawAddress, setWithdrawAddress] = useState('');
   const [copied, setCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   
   // Transfer State
   const [transferFrom, setTransferFrom] = useState('main');
@@ -31,6 +32,8 @@ const WalletModal: React.FC<WalletModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setActiveTab(initialTab);
+      setSuccessMsg(null);
+      setAmount('');
     }
   }, [isOpen, initialTab]);
 
@@ -48,21 +51,44 @@ const WalletModal: React.FC<WalletModalProps> = ({
     setIsProcessing(true);
     setTimeout(() => {
       if (activeTab === 'deposit') {
+        setSuccessMsg('充值申请已提交，请耐心等待到账');
         onDeposit(100); // Mock deposit
       } else if (activeTab === 'withdraw') {
         const val = parseFloat(amount);
         if (!isNaN(val)) {
           onWithdraw(val, withdrawAddress);
+          setSuccessMsg('提现申请已提交，等待审核');
         }
       } else if (activeTab === 'transfer') {
-        // Mock transfer logic
-        alert("转账成功！资金已划转。");
+        setSuccessMsg('资金划转成功');
       }
+      
       setIsProcessing(false);
-      setAmount('');
-      setWithdrawAddress('');
+      
+      // Auto close after showing success message
+      setTimeout(() => {
+        setSuccessMsg(null);
+        onClose();
+        setAmount('');
+        setWithdrawAddress('');
+      }, 2000);
     }, 1500);
   };
+
+  // Render Success State
+  if (successMsg) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="bg-white w-full max-w-lg rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-2xl animate-in zoom-in-95 duration-300 m-4">
+            <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-6">
+                <CheckCircle size={40} strokeWidth={3} />
+            </div>
+            <h3 className="text-xl font-black text-slate-800 mb-2">操作成功</h3>
+            <p className="text-slate-500 font-medium">{successMsg}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Render Content Helper
   const renderContent = () => {
